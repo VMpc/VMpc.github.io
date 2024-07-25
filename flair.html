@@ -1,56 +1,55 @@
 <html lang="en">
-    <head>
-    </head>
-    <body>
-        <h3>
-            Very shitty, simple flair maker for TF2
-        </h3>
-        <label> File 1:</label>
-        <input class="file1" type="file"/>
-    </br>
-    <label> File 2:</label>
-        <input class="file2" type="file"/>
-    </br>
-    <label> File 3:</label>
-        <input class="file3" type="file"/>
-    </br>
-    <label> File 4:</label>
-        <input class="file4" type="file"/>
-    </br>
-        <strong>Preview of the flair (Right click to download when finished)</strong>
-    </br>
-        <canvas id="Image" height="128" width="128"></canvas>
-    </body>
+   <head>
+   </head>
+   <body>
+      <h3>
+         Very shitty, simple flair maker for TF2
+      </h3>
+      <label> File 1:</label>
+      <input class="file1" type="file"/>
+      </br>
+      <label> File 2:</label>
+      <input class="file2" type="file"/>
+      </br>
+      <label> File 3:</label>
+      <input class="file3" type="file"/>
+      </br>
+      <label> File 4:</label>
+      <input class="file4" type="file"/>
+      </br>
+      <strong>Preview of the flair (Right click to download when finished)</strong>
+      </br>
+      <canvas id="Image" height="128" width="128"></canvas>
+   </body>
+   <script>
+      var canvas = document.getElementById("Image");
+      var ctx = canvas.getContext("2d");
 
-    <script>
-        var canvas = document.getElementById("Image");
-        var ctx = canvas.getContext("2d");
+      const fileValues = new Map([
+          ["file1", [0, 0, 64, 64]],
+          ["file2", [0, 64, 64, 64]],
+          ["file3", [64, 0, 64, 64]],
+          ["file4", [64, 64, 64, 64]]
+      ]);
 
-        const fileValues = new Map([
-            ["file1", [0, 0, 64, 64]], 
-            ["file2", [0, 64, 64, 64]], 
-            ["file3", [64, 0, 64, 64]], 
-            ["file4", [64, 64, 64, 64]]
-        ]);
+      var fileInputs = document.querySelectorAll('input[type="file"]');
+      for (var i = 0; i < fileInputs.length; i++) {
+          fileInputs[i].addEventListener('change', function() {
+              if (this.files && this.files[0]) {
+                  let fileValue = fileValues.get(this.className);
+                  createImg(URL.createObjectURL(this.files[0]), fileValue[0], fileValue[1], fileValue[2], fileValue[3]);
+              }
+          });
+      }
 
-        var fileInputs = document.querySelectorAll('input[type="file"]');
-        for (var i = 0; i < fileInputs.length; i++) {
-            fileInputs[i].addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    let fileValue = fileValues.get(this.className);
-                    createImg(URL.createObjectURL(this.files[0]), fileValue[0], fileValue[1], fileValue[2], fileValue[3]);
-                }
-            });
-        }
+      function createImg(src, dx, dy, dw, dh) {
+          var imageObj = new Image();
 
-        function createImg(src, dx, dy, dw, dh) {
-            var imageObj = new Image();
+          imageObj.onload = function() {
+              ctx.drawImage(imageObj, dx, dy, dw, dh);
+          };
 
-            imageObj.onload = function(){
-                ctx.drawImage(imageObj, dx,dy, dw, dh);
-            };
-
-            imageObj.src = src;
-        }
-    </script>
+          imageObj.src = src;
+      }
+   </script>
 </html>
